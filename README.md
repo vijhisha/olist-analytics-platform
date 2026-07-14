@@ -2,6 +2,9 @@
 
 ## Dataset: 9 CSVs
 
+Please download the dataset from Kaggle here: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+Create a folder '/data' under the root where you can place the 9 CSVs.
+
 | File | Grain (1 row =) | Primary Key | Key Foreign Keys | Description |
 |---|---|---|---|---|
 | `olist_orders_dataset.csv` | one order | `order_id` | `customer_id` | Core order record: status, purchase/approval/delivery/estimated-delivery timestamps |
