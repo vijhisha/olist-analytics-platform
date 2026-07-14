@@ -1,5 +1,25 @@
 # olist-analytics-platform
 
+## Prerequisites
+
+- Python 3.12
+- A GCP project with BigQuery enabled
+- A service account JSON key with `BigQuery Data Editor` and `BigQuery Job User` roles
+
+
+## Setup
+
+1. Clone the repo and create a virtual environment:
+`py -3.12 -m venv .venv`
+`.venv\Scripts\Activate.ps1`
+`pip install -r requirements.txt`
+2. Download the dataset from [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) into a `data/` folder at the repo root.
+3. Create a `.env` file at the repo root:
+`DBT_BQ_PROJECT=<your-gcp-project-id>
+DBT_BQ_DATASET=dev
+GOOGLE_APPLICATION_CREDENTIALS=<path-to-your-service-account-key>`
+
+
 ## Dataset: 9 CSVs
 
 Please download the dataset from Kaggle here: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
@@ -16,3 +36,8 @@ Create a folder '/data' under the root where you can place the 9 CSVs.
 | `olist_sellers_dataset.csv` | one seller | `seller_id` | — | Seller location (zip/city/state) |
 | `olist_geolocation_dataset.csv` | one lat/lng sample per zip-code prefix (many rows per prefix) | none (not unique) | — | Brazilian zip-code-prefix to coordinate mapping, for distance/mapping analysis |
 | `product_category_name_translation.csv` | one category | `product_category_name` | — | Maps PT category names to English |
+
+
+## Running ingestion
+
+Loads all 9 Olist CSVs into a `raw` dataset in BigQuery. 8 tables load with a full-replace on each run; `orders` loads in month-by-month batches (delete-then-append per month), so it's safe to rerun without duplicating data.
