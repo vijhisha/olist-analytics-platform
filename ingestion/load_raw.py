@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from dotenv import load_dotenv
 from google.cloud import bigquery
+from google.api_core.exceptions import NotFound
 
 SIMPLE_TABLES = {
     "olist_customers_dataset.csv": "customers",
@@ -41,6 +42,34 @@ def load_table(client: bigquery.Client, csv_path: str, table_id: str, string_col
     print(f"Loaded {len(df)} rows into {table_id}")
 
 
+def load_orders_by_month(client: bigquery.Client, csv_path: str, table_id: str) -> None:
+    df = pd.read_csv(csv_path, parse_dates=["order_purchase_timestamp"])
+    df["order_month"] = df["order_purchase_timestamp"].dt.to_period("M").astype(str)
+
+    for month, month_df in df.groupby("order_month"):
+        delete_query = f"""
+            DELETE FROM `{table_id}`
+            WHERE FORMAT_TIMESTAMP('%Y-%m', order_purchase_timestamp) = @month
+        """
+        query_config = bigquery.QueryJobConfig(
+            query_parameters=[bigquery.ScalarQueryParameter("month", "STRING", month)]
+        )
+        try:
+            client.query(delete_query, job_config=query_config).result()
+        except NotFound:
+            pass  # table doesn't exist yet on the very first run — nothing to delete
+
+        month_df = month_df.drop(columns=["order_month"])
+        load_config = bigquery.LoadJobConfig(
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+            autodetect=True,
+        )
+        job = client.load_table_from_dataframe(month_df, table_id, job_config=load_config)
+        job.result()
+
+        print(f"Loaded {len(month_df)} rows for {month} into {table_id}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Load Olist CSVs into BigQuery raw dataset")
     parser.add_argument(
@@ -65,6 +94,10 @@ def main():
         csv_path = os.path.join(args.source_dir, filename)
         table_id = f"{client.project}.raw.{table_name}"
         load_table(client, csv_path, table_id, string_columns=ZIP_COLUMNS.get(table_name))
+    
+    orders_csv = os.path.join(args.source_dir, "olist_orders_dataset.csv")
+    orders_table_id = f"{client.project}.raw.orders"
+    load_orders_by_month(client, orders_csv, orders_table_id)
 
 
 if __name__ == "__main__":
