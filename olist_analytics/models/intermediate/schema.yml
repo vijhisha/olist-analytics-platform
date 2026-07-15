@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: int_orders_enriched
+    description: >
+      Orders enriched with delivery timing and lateness flag.
+      `is_late` is intentionally based purely on whether a delivery event
+      occurred and its timing (order_delivered_customer_date vs.
+      order_estimated_delivery_date), independent of order_status.
+      Investigation showed order_status is not fully reliable as a proxy:
+      some canceled orders have delivery timestamps (delivered, then later
+      canceled), and some delivered orders lack a delivery timestamp.
+      97% of canceled orders (609/629) have an associated review, so
+      excluding canceled orders from lateness calculations would discard
+      meaningful signal for the delivery/review-score analysis.
+    columns:
+      - name: order_id
+        description: Primary key, one row per order.
+        tests:
+          - unique
+          - not_null
+      - name: is_late
+        description: >
+          TRUE if delivered after order_estimated_delivery_date, FALSE if
+          delivered on/before estimate, NULL if no delivery event recorded
+          (regardless of order_status).
