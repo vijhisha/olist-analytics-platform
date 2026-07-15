@@ -1,0 +1,29 @@
+[0m11:32:53.284241 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C9ABC41BE0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C9A96E3B30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C9AC0E25A0>]}
+
+
+============================== 11:32:53.285340 | 5312c14a-1e21-44e3-a15a-63025cd0e05e ==============================
+[0m11:32:53.285340 [info ] [MainThread]: Running with dbt=1.11.12
+[0m11:32:53.285340 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'no_print': 'None', 'version_check': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\bhand\\.dbt', 'invocation_command': 'dbt init', 'indirect_selection': 'eager', 'use_colors': 'True', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m11:33:25.460137 [debug] [MainThread]: Starter project path: C:\Users\bhand\Desktop\olist-analytics-platform\.venv\Lib\site-packages\dbt\include\starter_project
+[0m11:33:25.481195 [info ] [MainThread]: 
+Your new dbt project "olist_analytics" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m11:33:25.484166 [info ] [MainThread]: Setting up your profile.
+[0m11:36:44.620671 [info ] [MainThread]: Profile olist_analytics written to C:\Users\bhand\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m11:36:44.627732 [debug] [MainThread]: Command `dbt init` succeeded at 11:36:44.627732 after 231.52 seconds
+[0m11:36:44.627732 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C9ABF867E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C9CCA8E4B0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C9CCAC9FD0>]}
+[0m11:36:44.629754 [debug] [MainThread]: Flushing usage events
+[0m11:36:45.541937 [debug] [MainThread]: An error was encountered while trying to flush usage events

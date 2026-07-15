@@ -4,3 +4,4 @@ pyarrow>=14
 db-dtypes>=1.2
 python-dotenv>=1.0
 pandas-gbq>=0.26
+dbt-bigquery>=1.10
