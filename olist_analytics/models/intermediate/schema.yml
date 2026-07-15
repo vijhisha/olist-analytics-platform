@@ -24,3 +24,26 @@ models:
           TRUE if delivered after order_estimated_delivery_date, FALSE if
           delivered on/before estimate, NULL if no delivery event recorded
           (regardless of order_status).
+
+
+  - name: int_order_items_priced
+    description: >
+      Order items enriched with product category (English translation
+      included), seller location, and item_total. item_total is defined as
+      price + freight_value — total amount paid by the customer for that
+      line item, used as the GMV basis for revenue marts. Note this is
+      transaction value, not seller profit or platform take, since freight
+      typically passes through to a shipping carrier. All joins are left
+      joins to avoid silently dropping order items (and their revenue) when
+      a product or seller record is missing.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - order_item_id
+    columns:
+      - name: item_total
+        description: price + freight_value for this line item.
+        tests:
+          - not_null
