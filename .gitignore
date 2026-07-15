@@ -6,3 +6,4 @@ data/
 olist_analytics/target/
 olist_analytics/dbt_packages/
 olist_analytics/logs/
+logs/
