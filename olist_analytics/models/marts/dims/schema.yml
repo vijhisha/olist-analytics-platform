@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: >
+      Customer dimension at customer_id grain (one row per order-level
+      customer record, matching fct_orders' foreign key). customer_unique_id
+      is included to identify the same person across multiple customer_ids —
+      needed for any person-level analysis like repeat-purchase behavior.
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_products
+    description: >
+      Product dimension including both the raw Portuguese category name and
+      its English translation, resolved via a left join to
+      stg_category_translation.
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_sellers
+    columns:
+      - name: seller_id
+        tests:
+          - unique
+          - not_null
