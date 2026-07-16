@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      One row per order. order_value and item_count are aggregated from
+      int_order_items_priced up to order grain. Left join used deliberately
+      since 775 orders (mostly unavailable/canceled status) have no
+      associated items — coalesced to 0 rather than left null, since we
+      confirmed these orders genuinely have zero items rather than
+      unknown/missing data.
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: order_value
+        tests:
+          - not_null
+      - name: item_count
+        tests:
+          - not_null
+
+  - name: fct_order_items
+    description: >
+      Incremental fact table at order-item grain. Incremental filter is
+      based on shipping_limit_date, comparing against the max value already
+      in the table via {{ this }}. Composite unique key (order_id,
+      order_item_id) matches int_order_items_priced.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - order_item_id
