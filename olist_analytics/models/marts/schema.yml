@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: mart_gmv_daily
+    description: >
+      GMV, AOV, and category share at (order_date, category) grain.
+      Excludes canceled/unavailable orders — GMV reflects transactions that
+      actually occurred, not gross submitted order value. daily_aov is the
+      category's slice of spend per order that included it (daily_gmv /
+      order_count), not the full order total for orders touching that
+      category. category_gmv_share sums to ~1.0 per order_date (floating
+      point rounding, not exact).
+    columns:
+      - name: order_date
+        tests:
+          - not_null
