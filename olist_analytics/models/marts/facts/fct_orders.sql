@@ -17,6 +17,7 @@ select
     orders_enriched.order_delivered_customer_date,
     orders_enriched.order_estimated_delivery_date,
     orders_enriched.delivery_days,
+    orders_enriched.days_early,
     orders_enriched.is_late,
     coalesce(order_item_agg.order_value, 0) as order_value,
     coalesce(order_item_agg.item_count, 0) as item_count

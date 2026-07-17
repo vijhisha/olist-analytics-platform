@@ -14,3 +14,18 @@ models:
       - name: order_date
         tests:
           - not_null
+
+  - name: mart_delivery_performance
+    description: >
+      Delivery performance at (order_month, customer_state) grain.
+      Deliberately not filtered or segmented by order_status, consistent
+      with int_orders_enriched's is_late definition — lateness reflects
+      actual delivery events, independent of administrative status.
+      late_delivery_rate and avg_days_early use avg()'s built-in null
+      handling: orders with no delivery timestamp yet are excluded from
+      both the numerator and denominator, rather than treated as on-time
+      or causing a divide-by-zero.
+    columns:
+      - name: order_month
+        tests:
+          - not_null

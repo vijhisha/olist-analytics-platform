@@ -15,6 +15,12 @@ select
     end as delivery_days,
 
     case
+    when order_delivered_customer_date is not null
+        then timestamp_diff(order_estimated_delivery_date, order_delivered_customer_date, day)
+    else null
+    end as days_early,
+
+    case
         when order_delivered_customer_date is not null
             then order_delivered_customer_date > order_estimated_delivery_date
         else null
