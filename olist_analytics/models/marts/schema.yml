@@ -29,3 +29,20 @@ models:
       - name: order_month
         tests:
           - not_null
+
+  - name: mart_customer_cohorts
+    description: >
+      Monthly retention cohorts at (cohort_month, order_month) grain.
+      cohort_month is a customer's first-ever order month, identified via
+      customer_unique_id (not customer_id, which is per-order and would
+      make every order look like a first-time purchase). No order_status
+      filter — a canceled order still represents genuine customer
+      engagement/activity with the platform, which is what this mart
+      measures, distinct from GMV (actual revenue) or delivery performance
+      (fulfillment events). retention_rate is [fraction 0-1 / percentage
+      0-100 — state which you chose]. Rows where cohort_month = order_month
+      always show 100% retention by definition (verified).
+    columns:
+      - name: cohort_month
+        tests:
+          - not_null
