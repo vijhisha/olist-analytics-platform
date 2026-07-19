@@ -10,20 +10,25 @@ select
 
     case
         when order_delivered_customer_date is not null
-            then timestamp_diff(order_delivered_customer_date, order_purchase_timestamp, day)
-        else null
+            then
+                timestamp_diff(
+                    order_delivered_customer_date, order_purchase_timestamp, day
+                )
     end as delivery_days,
 
     case
-    when order_delivered_customer_date is not null
-        then timestamp_diff(order_estimated_delivery_date, order_delivered_customer_date, day)
-    else null
+        when order_delivered_customer_date is not null
+            then
+                timestamp_diff(
+                    order_estimated_delivery_date,
+                    order_delivered_customer_date,
+                    day
+                )
     end as days_early,
 
     case
         when order_delivered_customer_date is not null
             then order_delivered_customer_date > order_estimated_delivery_date
-        else null
     end as is_late
 
 from {{ ref('stg_orders') }}

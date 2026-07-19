@@ -7,7 +7,7 @@ with order_item_agg as (
     group by order_id
 )
 
-select 
+select
     orders_enriched.order_id,
     orders_enriched.customer_id,
     orders_enriched.order_status,
@@ -22,6 +22,6 @@ select
     coalesce(order_item_agg.order_value, 0) as order_value,
     coalesce(order_item_agg.item_count, 0) as item_count
 
-from {{ref ('int_orders_enriched')}} as orders_enriched
-    left join order_item_agg 
-        on orders_enriched.order_id = order_item_agg.order_id
+from {{ ref ('int_orders_enriched') }} as orders_enriched
+left join order_item_agg
+    on orders_enriched.order_id = order_item_agg.order_id

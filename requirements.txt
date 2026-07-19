@@ -5,3 +5,5 @@ db-dtypes>=1.2
 python-dotenv>=1.0
 pandas-gbq>=0.26
 dbt-bigquery>=1.10
+sqlfluff>=3.3
+sqlfluff-templater-dbt>=3.3
