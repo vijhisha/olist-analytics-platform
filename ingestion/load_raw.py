@@ -85,15 +85,10 @@ def main():
     create_raw_dataset(client)
     print(f"Reading CSVs from: {args.source_dir}")
 
-    ZIP_COLUMNS = {
-        "customers": ["customer_zip_code_prefix"],
-        "sellers": ["seller_zip_code_prefix"],
-    }
-
     for filename, table_name in SIMPLE_TABLES.items():
         csv_path = os.path.join(args.source_dir, filename)
         table_id = f"{client.project}.raw.{table_name}"
-        load_table(client, csv_path, table_id, string_columns=ZIP_COLUMNS.get(table_name))
+        load_table(client, csv_path, table_id)
     
     orders_csv = os.path.join(args.source_dir, "olist_orders_dataset.csv")
     orders_table_id = f"{client.project}.raw.orders"
