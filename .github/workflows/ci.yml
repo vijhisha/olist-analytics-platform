@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  DBT_BQ_PROJECT: ${{ vars.DBT_BQ_PROJECT }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-sa-key.json
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write GCP service account key
+        run: echo "${{ secrets.GCP_SA_KEY }}" > $GOOGLE_APPLICATION_CREDENTIALS
+
+      - name: Set up dbt profile
+        run: |
+          mkdir -p ~/.dbt
+          cp olist_analytics/profiles.example.yml ~/.dbt/profiles.yml
+
+      - name: Install dbt packages
+        working-directory: olist_analytics
+        run: dbt deps
+
+      - name: Lint SQL
+        working-directory: olist_analytics
+        run: sqlfluff lint models
+
+      - name: dbt build
+        working-directory: olist_analytics
+        run: dbt build --target ci --exclude resource_type:snapshot
