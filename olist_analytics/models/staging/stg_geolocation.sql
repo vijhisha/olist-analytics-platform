@@ -1,5 +1,5 @@
 select
-    geolocation_zip_code_prefix,
+    lpad(cast(geolocation_zip_code_prefix as string), 5, '0') as geolocation_zip_code_prefix,
     geolocation_lat,
     geolocation_lng,
     geolocation_city,
