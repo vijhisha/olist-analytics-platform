@@ -1,0 +1,12 @@
+olist_analytics:
+  target: ci
+  outputs:
+    ci:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('DBT_BQ_PROJECT') }}"
+      dataset: ci
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      threads: 4
+      location: US
+      job_execution_timeout_seconds: 300
